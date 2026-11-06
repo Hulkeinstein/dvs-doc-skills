@@ -1,6 +1,6 @@
 ---
 name: dvs-pptx
-description: Creates, reads and edits PowerPoint presentations (.pptx, .potx) — 파워포인트 · 발표 자료 · 슬라이드 · 피치덱 · 강의 자료. Use whenever a .pptx/.potx file is involved as input or output: making a deck from notes or a document, pulling text or speaker notes out of slides (even to use elsewhere), changing words or images on existing slides, filling a company template, merging or splitting decks, reordering or deleting slides, adding speaker notes. Not for Word, spreadsheets, PDF or Google Slides.
+description: "Creates, reads and edits PowerPoint presentations (.pptx, .potx) — 파워포인트 · 발표 자료 · 슬라이드 · 피치덱 · 강의 자료. Use whenever a .pptx/.potx file is involved as input or output: making a deck from notes or a document, pulling text or speaker notes out of slides (even to use elsewhere), changing words or images on existing slides, filling a company template, merging or splitting decks, reordering or deleting slides, adding speaker notes. Not for Word, spreadsheets, PDF or Google Slides."
 ---
 
 # 파워포인트 스킬

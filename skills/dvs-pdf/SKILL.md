@@ -1,6 +1,6 @@
 ---
 name: dvs-pdf
-description: Reads, creates and changes PDF files — PDF · 스캔 문서 · 계약서 · 영수증 · 신청서 양식. Use whenever a .pdf is involved or the user wants one: pulling out text or tables, merging several PDFs, splitting or extracting pages, rotating, adding a watermark or page numbers, filling in a PDF form, locking with or removing a password, pulling out images, reading scanned pages with OCR, or making a new PDF (from notes, markdown, or by converting a Word/PowerPoint/Excel file).
+description: "Reads, creates and changes PDF files — PDF · 스캔 문서 · 계약서 · 영수증 · 신청서 양식. Use whenever a .pdf is involved or the user wants one: pulling out text or tables, merging several PDFs, splitting or extracting pages, rotating, adding a watermark or page numbers, filling in a PDF form, locking with or removing a password, pulling out images, reading scanned pages with OCR, or making a new PDF (from notes, markdown, or by converting a Word/PowerPoint/Excel file)."
 ---
 
 # PDF 스킬

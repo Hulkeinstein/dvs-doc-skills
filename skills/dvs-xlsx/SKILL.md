@@ -1,6 +1,6 @@
 ---
 name: dvs-xlsx
-description: Creates, reads, edits, cleans and checks Excel spreadsheets (.xlsx, .xlsm, .csv, .tsv) — 엑셀 · 스프레드시트 · 표 · 매출표 · 가계부. Use whenever the result should be a spreadsheet file or the user points at an existing spreadsheet (even casually, like "다운로드 폴더에 있는 엑셀"): making a table from notes, adding columns or totals, summarising by month, fixing broken formulas, tidying messy rows, adding a chart, or converting between xlsx and csv. Not for Word, slides, PDF or Google Sheets.
+description: 'Creates, reads, edits, cleans and checks Excel spreadsheets (.xlsx, .xlsm, .csv, .tsv) — 엑셀 · 스프레드시트 · 표 · 매출표 · 가계부. Use whenever the result should be a spreadsheet file or the user points at an existing spreadsheet (even casually, like "다운로드 폴더에 있는 엑셀"): making a table from notes, adding columns or totals, summarising by month, fixing broken formulas, tidying messy rows, adding a chart, or converting between xlsx and csv. Not for Word, slides, PDF or Google Sheets.'
 ---
 
 # 엑셀 스킬

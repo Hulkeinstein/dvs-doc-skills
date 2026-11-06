@@ -7,7 +7,6 @@ description: Shared helpers for office files (엑셀 · 워드 · 파워포인�
 
 엑셀 · 워드 · 파워포인트 · PDF 스킬이 함께 쓰는 도구다. 스크립트는 `scripts/` 안에 있고, 처음에는 `--help`로 쓰는 법만 본다(소스 전체를 읽지 않는다).
 
-
 > 명령에 나오는 `scripts/…`는 **이 스킬 폴더 안** 경로다. 사용자 작업 폴더에서 실행할 때는 스킬 폴더를 붙인 전체 경로로 부른다(다른 스킬의 도구도 같다 — 예: `<스킬 폴더들이 있는 곳>/dvs-office/scripts/render.py`). Mac · Linux에서 `python`이 없으면 `python3`로 부른다.
 ## 1. 시작 전에 — 설치 확인
 
@@ -16,7 +15,7 @@ python scripts/check_env.py            # 무엇이 있고 무엇이 없는지
 python scripts/check_env.py --need docx render   # 이번 일에 필요한 것만
 ```
 
-- 없는 것이 있으면 출력된 설치 명령을 **사용자에게 보여 주고 「설치해도 될까요?」라고 물은 뒤** 실행한다. 묻지 않고 설치하지 않는다.
+- 없는 것이 있으면 출력된 설치 명령을 **사용자에게 보여 주고 「설치해도 될까요?」라고 물은 뒤** 실행한다. 묻지 않고 설치하지 않는다. 앱이 명령을 자동으로 실행하는 설정이어도 먼저 묻고 대답을 기다린다(설치는 사용자 PC를 바꾸는 일이다).
 - 파이썬 자체가 없으면: Windows는 `winget install -e --id Python.Python.3.12`, Mac은 `brew install python`.
 - LibreOffice(그림으로 확인 · 수식 다시 계산 · PDF로 바꾸기)와 Tesseract(스캔 글자 읽기)는 꼭 필요할 때만 설치를 권한다. 없어도 만들기 · 읽기 · 고치기는 된다.
 

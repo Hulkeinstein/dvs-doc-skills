@@ -5,7 +5,6 @@ description: "Reads, creates and changes PDF files — PDF · 스캔 문서 · �
 
 # PDF 스킬
 
-
 > 명령에 나오는 `scripts/…`는 **이 스킬 폴더 안** 경로다. 사용자 작업 폴더에서 실행할 때는 스킬 폴더를 붙인 전체 경로로 부른다(다른 스킬의 도구도 같다 — 예: `<스킬 폴더들이 있는 곳>/dvs-office/scripts/render.py`). Mac · Linux에서 `python`이 없으면 `python3`로 부른다.
 ## 먼저
 
@@ -53,7 +52,9 @@ description: "Reads, creates and changes PDF files — PDF · 스캔 문서 · �
 - 글 · 마크다운에서 바로: `python scripts/pdf_tools.py create 원고.md --out 결과.pdf [--title 제목]` — `#` 제목, 문단, `-` 목록, `|` 표, `**굵게**`를 한글 글꼴로 A4에 찍는다.
 - 더 꾸민 PDF가 필요하면 reportlab으로 코드를 직접 쓴다. 한글은 **반드시 한글 글꼴을 등록**해야 한다(`pdf_tools.py`의 `register_korean_font()`를 가져다 쓴다) — 기본 글꼴은 한글을 네모로 찍는다. 위첨자 · 아래첨자는 유니코드 문자(²) 대신 `<super>2</super>`를 쓴다.
 
-## 넘기기 전 확인
+## 넘기기 전 확인 (빠뜨리지 않는다)
+
+> 🔴 그림으로 보는 확인(`render.py`)을 하지 않았으면 「다 됐다」고 말하지 않는다. 할 수 없었으면(LibreOffice가 없거나 응답하지 않음) 그 사실을 사용자에게 그대로 알린다.
 
 - 만든 · 바꾼 PDF는 `render.py`로 첫 쪽과 바뀐 쪽을 그림으로 본다(한글 깨짐 · 잘림 · 돌아간 방향).
 - `info`로 쪽 수가 기대와 맞는지 본다.

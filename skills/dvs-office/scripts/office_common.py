@@ -69,24 +69,77 @@ RECALC_XCU = '''<?xml version="1.0" encoding="UTF-8"?>
 '''
 
 
-def soffice_convert(src, fmt, outdir=None, timeout=180, recalc=True):
+class SofficeError(SystemExit):
+    """LibreOffice failed or did not answer. Subclass of SystemExit: callers that do not catch it
+    exit with the message (no traceback); recalc.py catches it to fall back to recalculate-on-open."""
+
+
+# Reused across runs so only the first run pays for creating a LibreOffice profile.
+PROFILE_DIR = Path(tempfile.gettempdir()) / 'dvs-office-lo-profile'
+
+
+def _prepare_profile(prof, recalc):
+    if recalc:
+        (Path(prof) / 'user').mkdir(parents=True, exist_ok=True)
+        xcu = Path(prof) / 'user' / 'registrymodifications.xcu'
+        if not xcu.exists():
+            xcu.write_text(RECALC_XCU, encoding='utf-8')
+
+
+def _kill_tree(proc):
+    # soffice.exe starts soffice.bin as a child; killing only the parent leaves the child hanging.
+    if os.name == 'nt':
+        subprocess.run(['taskkill', '/F', '/T', '/PID', str(proc.pid)], capture_output=True)
+    else:
+        import signal
+        try:
+            os.killpg(proc.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+    proc.wait()
+
+
+def _run_soffice(exe, prof, fmt, outdir, src, timeout):
+    cmd = [exe, f'-env:UserInstallation={Path(prof).as_uri()}', '--headless', '--norestore',
+           '--convert-to', fmt, '--outdir', str(outdir), str(src)]
+    # Without these LibreOffice asks the default printer for page metrics on start and on PDF export;
+    # an unreachable (e.g. Wi-Fi) printer stalls each run ~50 s. Conversions do not need a printer.
+    env = dict(os.environ, SAL_DISABLE_PRINTERLIST='1', SAL_DISABLE_DEFAULTPRINTER='1')
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env,
+                            start_new_session=(os.name != 'nt'))
+    try:
+        out, err = proc.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        _kill_tree(proc)
+        return None
+    return proc.returncode, (err or out or '').strip()
+
+
+def soffice_convert(src, fmt, outdir=None, timeout=90, recalc=True):
     """Convert with LibreOffice headless. fmt e.g. 'pdf', 'xlsx', 'docx'. Returns the output path.
     A private profile directory is used so a running LibreOffice window does not block the conversion,
-    and (recalc=True) spreadsheet formulas are recalculated on load."""
+    and (recalc=True) spreadsheet formulas are recalculated on load.
+    If LibreOffice does not answer within `timeout` seconds it is killed and tried once more with a
+    fresh profile; a second failure raises SofficeError."""
     exe = find_soffice()
     if not exe:
-        sys.exit('LibreOffice(soffice)가 없습니다 — python check_env.py --need render 로 설치 방법을 확인하세요.')
+        raise SofficeError('LibreOffice(soffice)가 없습니다 — python check_env.py --need render 로 설치 방법을 확인하세요.')
     src = Path(src).resolve()
     outdir = Path(outdir or src.parent).resolve()
     outdir.mkdir(parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory() as prof:
-        if recalc:
-            (Path(prof) / 'user').mkdir(parents=True, exist_ok=True)
-            (Path(prof) / 'user' / 'registrymodifications.xcu').write_text(RECALC_XCU, encoding='utf-8')
-        cmd = [exe, f'-env:UserInstallation={Path(prof).as_uri()}', '--headless', '--norestore',
-               '--convert-to', fmt, '--outdir', str(outdir), str(src)]
-        r = subprocess.run(cmd, capture_output=True, text=True, timeout=timeout)
     out = outdir / (src.stem + '.' + fmt.split(':')[0])
-    if r.returncode != 0 or not out.exists():
-        sys.exit(f'변환 실패({fmt}): {r.stderr.strip() or r.stdout.strip()}')
+    print(f'LibreOffice로 처리 중입니다(보통 몇 초 · 처음 한 번은 더 걸림, 최대 {timeout}초) — 끝날 때까지 기다려 주세요.', file=sys.stderr, flush=True)
+    _prepare_profile(PROFILE_DIR, recalc)
+    r = _run_soffice(exe, PROFILE_DIR, fmt, outdir, src, timeout)
+    if r is None:  # no answer: retry once with a brand-new profile
+        print(f'LibreOffice가 {timeout}초 안에 끝나지 않아 끄고 한 번 더 시도합니다.', file=sys.stderr, flush=True)
+        shutil.rmtree(PROFILE_DIR, ignore_errors=True)
+        with tempfile.TemporaryDirectory(ignore_cleanup_errors=True) as prof:
+            _prepare_profile(prof, recalc)
+            r = _run_soffice(exe, prof, fmt, outdir, src, timeout)
+    if r is None:
+        raise SofficeError(f'LibreOffice가 두 번 모두 {timeout}초 안에 응답하지 않았습니다(변환 {fmt} 실패).')
+    code, msg = r
+    if code != 0 or not out.exists():
+        raise SofficeError(f'변환 실패({fmt}): {msg}')
     return out

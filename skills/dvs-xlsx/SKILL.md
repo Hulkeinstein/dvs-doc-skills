@@ -5,7 +5,6 @@ description: 'Creates, reads, edits, cleans and checks Excel spreadsheets (.xlsx
 
 # 엑셀 스킬
 
-
 > 명령에 나오는 `scripts/…`는 **이 스킬 폴더 안** 경로다. 사용자 작업 폴더에서 실행할 때는 스킬 폴더를 붙인 전체 경로로 부른다(다른 스킬의 도구도 같다 — 예: `<스킬 폴더들이 있는 곳>/dvs-office/scripts/render.py`). Mac · Linux에서 `python`이 없으면 `python3`로 부른다.
 ## 먼저
 
@@ -39,6 +38,8 @@ description: 'Creates, reads, edits, cleans and checks Excel spreadsheets (.xlsx
 
 ## 넘기기 전 확인 (빠뜨리지 않는다)
 
-1. 수식이 있으면 `dvs-office`의 `python scripts/recalc.py 파일.xlsx --mark --show <핵심 칸>` → 오류 0, 핵심 값이 맞는지 본다. 이번에 만든 파일이 아니면 `--mark` 없이. 사용자가 다른 프로그램(구글 시트 미리보기 · 데이터 분석)으로 숫자를 읽을 거면 `--write-values 파일-값.xlsx`도.
-2. 필요하면 `python scripts/render.py 파일.xlsx`로 그림을 보고 잘린 열 · ##### 표시가 없는지 본다.
+> 🔴 그림으로 보는 확인(`render.py`)을 하지 않았으면 「다 됐다」고 말하지 않는다. 할 수 없었으면(LibreOffice가 없거나 응답하지 않음) 그 사실을 사용자에게 그대로 알린다.
+
+1. 수식이 있으면 `dvs-office`의 `python scripts/recalc.py 파일.xlsx --mark --show <핵심 칸>` → 오류 0, 핵심 값이 맞는지 본다. 끝 코드 2(`"recalculated": false`)면 검사를 못 한 것이다 — 「오류 없음」이라고 말하지 말고 「수식 검사를 하지 못했고, 엑셀에서 열 때 다시 계산된다」고 알린다. 이번에 만든 파일이 아니면 `--mark` 없이. 사용자가 다른 프로그램(구글 시트 미리보기 · 데이터 분석)으로 숫자를 읽을 거면 `--write-values 파일-값.xlsx`도.
+2. `dvs-office`의 `render.py 파일.xlsx`로 그림을 보고 잘린 열 · ##### 표시 · 칸에 잘린 글이 없는지 본다.
 3. 저장 위치와 시트 이름, 무엇을 넣었는지 한두 줄로 알려 준다.

@@ -6,7 +6,9 @@
   python recalc.py new.xlsx --write-values new-값.xlsx   # also save a copy whose formula cells carry computed values
 
 How it works: a temporary copy is recalculated by LibreOffice and read back with openpyxl(data_only).
-Exit code 0 = no formula errors, 1 = errors found (listed in the JSON).
+Exit code 0 = no formula errors, 1 = errors found (listed in the JSON),
+2 = LibreOffice did not answer: nothing was checked (with --mark the file is still marked
+"recalculate when opened"). Tell the user the check could not be done — never report 0 errors.
 """
 import argparse
 import json
@@ -16,7 +18,7 @@ import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).parent))
-from office_common import soffice_convert  # noqa: E402
+from office_common import SofficeError, soffice_convert  # noqa: E402
 
 ERRORS = ('#REF!', '#DIV/0!', '#VALUE!', '#NAME?', '#N/A', '#NUM!', '#NULL!', 'Err:', '#SPILL!', '#CALC!')
 
@@ -36,7 +38,17 @@ def main():
     formulas = openpyxl.load_workbook(src, keep_vba=macro)  # formulas as text; keep macros if re-saved
     n_formulas = sum(1 for ws in formulas for row in ws.iter_rows() for c in row if isinstance(c.value, str) and c.value.startswith('='))
     with tempfile.TemporaryDirectory() as tmp:
-        calc_path = soffice_convert(src, 'xlsx', tmp)
+        try:
+            calc_path = soffice_convert(src, 'xlsx', tmp)
+        except SofficeError as e:
+            if a.mark:
+                formulas.calculation.fullCalcOnLoad = True
+                formulas.save(src)
+            print(json.dumps({'formulas': n_formulas, 'recalculated': False, 'marked_recalc_on_open': a.mark,
+                              'message': f'{e.code} 수식 오류 검사는 하지 못했습니다'
+                                         + (' — 엑셀에서 열 때 다시 계산되도록 표시했습니다.' if a.mark else '.')},
+                             ensure_ascii=False, indent=2))
+            return 2
         calc = openpyxl.load_workbook(calc_path, data_only=True)
         errors = []
         for ws in calc:

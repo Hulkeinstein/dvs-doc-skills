@@ -5,7 +5,6 @@ description: Creates, reads and edits Word documents (.docx, .dotx) — 워드 �
 
 # 워드 스킬
 
-
 > 명령에 나오는 `scripts/…`는 **이 스킬 폴더 안** 경로다. 사용자 작업 폴더에서 실행할 때는 스킬 폴더를 붙인 전체 경로로 부른다(다른 스킬의 도구도 같다 — 예: `<스킬 폴더들이 있는 곳>/dvs-office/scripts/render.py`). Mac · Linux에서 `python`이 없으면 `python3`로 부른다.
 ## 먼저
 
@@ -42,7 +41,9 @@ description: Creates, reads and edits Word documents (.docx, .dotx) — 워드 �
 
 - 양식을 받으면 그 양식의 스타일을 그대로 써서 내용만 채운다. python-docx는 `.dotx`를 바로 열지 못하므로 `dvs-office`의 `template.py open 양식.dotx --out 작업.docx`로 바꿔 연다(내용은 그대로, 형식 표시만 바뀐다). 결과를 다시 양식으로 넘길 때는 `template.py save 작업.docx --out 새양식.dotx`.
 
-## 넘기기 전 확인
+## 넘기기 전 확인 (빠뜨리지 않는다)
+
+> 🔴 그림으로 보는 확인(`render.py`)을 하지 않았으면 「다 됐다」고 말하지 않는다. 할 수 없었으면(LibreOffice가 없거나 응답하지 않음) 그 사실을 사용자에게 그대로 알린다.
 
 1. `python scripts/docx_tools.py text 결과.docx`로 글 순서 · 빠진 곳을 본다.
 2. `dvs-office`의 `render.py 결과.docx`로 쪽 그림을 보고: 한글 깨짐 · 표가 쪽 밖으로 · 빈 쪽 · 그림 잘림이 없는지.

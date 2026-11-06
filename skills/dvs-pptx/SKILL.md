@@ -5,7 +5,6 @@ description: "Creates, reads and edits PowerPoint presentations (.pptx, .potx) �
 
 # 파워포인트 스킬
 
-
 > 명령에 나오는 `scripts/…`는 **이 스킬 폴더 안** 경로다. 사용자 작업 폴더에서 실행할 때는 스킬 폴더를 붙인 전체 경로로 부른다(다른 스킬의 도구도 같다 — 예: `<스킬 폴더들이 있는 곳>/dvs-office/scripts/render.py`). Mac · Linux에서 `python`이 없으면 `python3`로 부른다.
 ## 먼저
 
@@ -45,6 +44,8 @@ description: "Creates, reads and edits PowerPoint presentations (.pptx, .potx) �
 - 그 밖의 수정(그림 바꾸기, 표 칸 고치기, 도형 추가)은 python-pptx로 열어 코드로 하고 새 이름으로 저장한다. 기존 자리(placeholder)에 글을 넣을 때는 `shape.text_frame`을 쓰고 새 글 상자를 겹쳐 올리지 않는다.
 
 ## 넘기기 전 확인 (빠뜨리지 않는다)
+
+> 🔴 그림으로 보는 확인(`render.py`)을 하지 않았으면 「다 됐다」고 말하지 않는다. 할 수 없었으면(LibreOffice가 없거나 응답하지 않음) 그 사실을 사용자에게 그대로 알린다.
 
 1. `dvs-office`의 `render.py 결과.pptx --dpi 60`으로 슬라이드 그림을 모두 연다. 처음 볼 때는 **문제가 있다고 가정하고** 찾는다:
    - 글이 상자 밖으로 넘침 · 다른 요소와 겹침 · 잘린 글

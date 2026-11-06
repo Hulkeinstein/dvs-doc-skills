@@ -30,3 +30,7 @@
 - 공개 도구만 쓴다: openpyxl · pandas · python-docx · python-pptx · pypdf · pdfplumber · reportlab · pypdfium2 · pytesseract · LibreOffice · Tesseract.
 - 한국어 문서가 기본이다: 한글 글꼴(맑은 고딕 · 나눔고딕 · Noto Sans KR)을 찾아 쓴다.
 - 원본 파일은 덮어쓰지 않는다 — 모든 고치기 명령은 새 이름으로 저장한다.
+
+## 사용 허락
+
+MIT 라이선스 — 누구나 무료로 쓰고, 고치고, 다시 나눠 줄 수 있다. 다시 나눠 줄 때는 `LICENSE` 파일을 함께 둔다.

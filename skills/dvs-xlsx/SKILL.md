@@ -15,9 +15,10 @@ description: 'Creates, reads, edits, cleans and checks Excel spreadsheets (.xlsx
 ## 만들기 · 고치기 — openpyxl로 직접 코드를 쓴다
 
 - **계산은 엑셀이 하게 한다.** 합계 · 평균 · 비율은 파이썬에서 계산한 숫자를 넣지 말고 `=SUM(B2:B13)`처럼 수식으로 넣는다. 그래야 사용자가 숫자를 바꾸면 결과도 바뀐다.
+- **뜻 있는 계산만 넣는다.** 사용자가 요청했거나 표의 목적에 맞는 계산만 수식으로 넣는다. 성격이 다른 숫자(매출과 광고 예산, 금액과 건수)를 더하거나 평균 내지 않고, 원래 자료에 없는 비율 · 합계를 새로 만들어 보이지 않는다. 모르는 값은 계산하지 말고 「[확인 필요]」로 둔다.
 - 입력값은 한곳(예: 「가정」 칸이나 시트)에 두고 수식이 그 칸을 가리키게 한다. 같은 숫자를 여러 칸에 적어 넣지 않는다.
 - 첫 줄 머리글: 굵게, 연한 배경, 틀 고정(`ws.freeze_panes = 'A2'`), 자동 필터.
-- 열 너비는 내용에 맞춘다(한글은 글자당 폭 약 2로 계산). 날짜 · 금액 · 비율은 표시 형식을 준다(`yyyy-mm-dd`, `#,##0`, `0.0%`).
+- 열 너비는 저장한 뒤 `python scripts/xlsx_tools.py fit 파일.xlsx`로 맞춘다(엑셀은 한글을 그림 확인보다 넓게 그리고, 필터 단추도 머리글 칸을 차지한다 — 눈대중으로 정하면 웹 엑셀에서 잘린다). 날짜 · 금액 · 비율은 표시 형식을 준다(`yyyy-mm-dd`, `#,##0`, `0.0%`).
 - 큰 표는 pandas로 다루고, 서식은 openpyxl로 입힌다. pandas가 없거나 PC 보안 정책이 막으면(Windows 「앱 제어」) openpyxl만으로 읽고 고친다.
 - 있는 파일을 고칠 때는 `openpyxl.load_workbook(파일)`로 열어 필요한 칸만 바꾸고 **새 이름으로 저장**한다. 매크로 파일(.xlsm)은 `keep_vba=True`. 엑셀 양식(.xltx)은 `dvs-office`의 `template.py open`으로 먼저 바꾼다.
 - ⚠ openpyxl은 원래 파일의 차트 · 그림 · 피벗 일부를 저장할 때 잃는다. `inspect`에서 차트나 그림이 보이면 사용자에게 먼저 알리고, 값만 바꾸는 일이면 그대로 진행하되 결과를 그림으로 확인한다.
@@ -41,5 +42,5 @@ description: 'Creates, reads, edits, cleans and checks Excel spreadsheets (.xlsx
 > 🔴 그림으로 보는 확인(`render.py`)을 하지 않았으면 「다 됐다」고 말하지 않는다. 할 수 없었으면(LibreOffice가 없거나 응답하지 않음) 그 사실을 사용자에게 그대로 알린다.
 
 1. 수식이 있으면 `dvs-office`의 `python scripts/recalc.py 파일.xlsx --mark --show <핵심 칸>` → 오류 0, 핵심 값이 맞는지 본다. 끝 코드 2(`"recalculated": false`)면 검사를 못 한 것이다 — 「오류 없음」이라고 말하지 말고 「수식 검사를 하지 못했고, 엑셀에서 열 때 다시 계산된다」고 알린다. 이번에 만든 파일이 아니면 `--mark` 없이. 사용자가 다른 프로그램(구글 시트 미리보기 · 데이터 분석)으로 숫자를 읽을 거면 `--write-values 파일-값.xlsx`도.
-2. `dvs-office`의 `render.py 파일.xlsx`로 그림을 보고 잘린 열 · ##### 표시 · 칸에 잘린 글이 없는지 본다.
+2. `python scripts/xlsx_tools.py fit 파일.xlsx`를 실행한다(이미 맞으면 `"changed": []`). 그다음 `dvs-office`의 `render.py 파일.xlsx`로 그림을 보고 잘린 열 · ##### 표시 · 칸에 잘린 글이 없는지 본다.
 3. 저장 위치와 시트 이름, 무엇을 넣었는지 한두 줄로 알려 준다.

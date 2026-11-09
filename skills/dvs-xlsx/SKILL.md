@@ -20,7 +20,7 @@ description: 'Creates, reads, edits, cleans and checks Excel spreadsheets (.xlsx
 - 첫 줄 머리글: 굵게, 연한 배경, 틀 고정(`ws.freeze_panes = 'A2'`), 자동 필터.
 - 열 너비는 저장한 뒤 `python scripts/xlsx_tools.py fit 파일.xlsx`로 맞춘다(엑셀은 한글을 그림 확인보다 넓게 그리고, 필터 단추도 머리글 칸을 차지한다 — 눈대중으로 정하면 웹 엑셀에서 잘린다). 날짜 · 금액 · 비율은 표시 형식을 준다(`yyyy-mm-dd`, `#,##0`, `0.0%`).
 - 큰 표는 pandas로 다루고, 서식은 openpyxl로 입힌다. pandas가 없거나 PC 보안 정책이 막으면(Windows 「앱 제어」) openpyxl만으로 읽고 고친다.
-- 있는 파일을 고칠 때는 `openpyxl.load_workbook(파일)`로 열어 필요한 칸만 바꾸고 **새 이름으로 저장**한다. 매크로 파일(.xlsm)은 `keep_vba=True`. 엑셀 양식(.xltx)은 `dvs-office`의 `template.py open`으로 먼저 바꾼다.
+- 있는 파일을 고칠 때는(앞서 이 대화에서 만든 파일도 포함) `openpyxl.load_workbook(파일)`로 열어 필요한 칸만 바꾸고 **새 이름으로 저장**한다. 매크로 파일(.xlsm)은 `keep_vba=True`. 엑셀 양식(.xltx)은 `dvs-office`의 `template.py open`으로 먼저 바꾼다.
 - ⚠ openpyxl은 원래 파일의 차트 · 그림 · 피벗 일부를 저장할 때 잃는다. `inspect`에서 차트나 그림이 보이면 사용자에게 먼저 알리고, 값만 바꾸는 일이면 그대로 진행하되 결과를 그림으로 확인한다.
 
 ## 정리하기 (지저분한 표)
